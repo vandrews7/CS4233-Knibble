@@ -55,7 +55,8 @@ public class KnibbleGameManager
     	// pop first item in coins list and set as holding for current player
     	List<Player> currPlayers = getCurrentPlayers();
     	for(Player player: currPlayers) {
-    			player.setHolding(coins.remove(0)); // pop the first element in the coins list
+    		int i = currPlayers.indexOf(player);
+    		this.players.get(i).setHolding(coins.remove(0)); // pop the first element in the coins list
     	}
     	
     }
@@ -72,7 +73,8 @@ public class KnibbleGameManager
     	//pop first item in guesses list and set as guess for current player
     	List<Player> currPlayers = getCurrentPlayers();
     	for(Player player: currPlayers) {
-    			player.setGuess(guesses.remove(0)); // pop the first element in the guesses list
+    		int i = currPlayers.indexOf(player);
+    		this.players.get(i).setGuess(guesses.remove(0)); // pop the first element in the guesses list
     	}
     }
     
@@ -84,6 +86,8 @@ public class KnibbleGameManager
      */
     public String playRound()
     {
+    	List<Player> currPlayers = getCurrentPlayers();
+    	
     	
     	
         return "A loses";
