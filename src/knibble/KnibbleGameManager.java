@@ -34,6 +34,10 @@ public class KnibbleGameManager
        players.forEach((player -> this.players.add(new Player(player))));
     }
     
+    /**
+     * Gets the list of players from the manager.
+     * @return list of players
+     */
     public List<Player> getPlayers() {
     	return this.players;
     }
@@ -47,12 +51,11 @@ public class KnibbleGameManager
      */
     public void enterHoldings(List<Integer> coins)
     {
-    	// iterate through the list of players and check if the player is currently in the game
-    	// if player is playing, pop first item in coins list
-    	for(Player player: this.players) {
-    		if(player.getIsPlaying()) {
+    	
+    	// pop first item in coins list and set as holding for current player
+    	List<Player> currPlayers = getCurrentPlayers();
+    	for(Player player: currPlayers) {
     			player.setHolding(coins.remove(0)); // pop the first element in the coins list
-    		}
     	}
     	
     }
@@ -66,12 +69,10 @@ public class KnibbleGameManager
      */
     public void enterGuesses(List<Integer> guesses)
     {
-    	// iterate through the list of players and check if the player is currently in the game
-    	// if player is playing, pop first item in guesses list
-    	for(Player player: this.players) {
-    		if(player.getIsPlaying()) {
+    	//pop first item in guesses list and set as guess for current player
+    	List<Player> currPlayers = getCurrentPlayers();
+    	for(Player player: currPlayers) {
     			player.setGuess(guesses.remove(0)); // pop the first element in the guesses list
-    		}
     	}
     }
     
@@ -83,6 +84,25 @@ public class KnibbleGameManager
      */
     public String playRound()
     {
+    	
+    	
         return "A loses";
+    }
+    
+    /**
+     * helper function to get players that are currently playing
+     * @return list of current players
+     */
+    private List<Player> getCurrentPlayers() {
+    	// iterate through the list of players and check if the player is currently in the game
+    	List<Player> currPlayers = new ArrayList<Player>();
+    	
+    	for(Player player: this.players) {
+    		if(player.getIsPlaying()) {
+    			currPlayers.add(player);
+    		}
+    	}
+    	
+    	return currPlayers;
     }
 }
