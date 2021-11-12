@@ -108,8 +108,13 @@ public class KnibbleGameManager
     	return currPlayers;
     }
     
+    /**
+     * This helper function reduces duplicate code in the enterGuesses and enterHoldings functions.
+     * @param type enum used to distinguish what type of info is being entered
+     * @param list list of info that will be added to the current players
+     */
     private void enterInfo(Info type, List<Integer> list) {
-    	//pop first item in guesses list and set as guess for current player
+    	//pop first item in list and set as specific info for current player based on enum input
     	List<Player> currPlayers = getCurrentPlayers();
     	for(Player player: currPlayers) {
     		int i = currPlayers.indexOf(player);
