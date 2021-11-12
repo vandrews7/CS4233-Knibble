@@ -16,3 +16,12 @@ X create two player game
 X add holdings 3 and 2 to players respectively
 X check players holdings with list of expected holdings
 
+## game with 0 players
+
+## game with 5 players
+
+## game where no one gets the right answer in the first round
+
+## game with 3 rounds
+
+## one person game

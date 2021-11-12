@@ -22,6 +22,7 @@ import java.util.List;
 public class KnibbleGameManager
 {
 	private List<Player> players = new ArrayList<Player>();
+	private int totalNumCoins = 0;
 	
 	/**
 	 * This enum is used for a helper function to switch between entering holdings or entering guesses.
@@ -59,6 +60,7 @@ public class KnibbleGameManager
      */
     public void enterHoldings(List<Integer> coins)
     {
+    	this.totalNumCoins = coins.stream().mapToInt(Integer::intValue).sum();
     	enterInfo(Info.HOLDING, coins);
     }
     
@@ -86,9 +88,36 @@ public class KnibbleGameManager
     	List<Player> currPlayers = getCurrentPlayers();
     	int numCurrPlayers = currPlayers.size();
     	
-    	// 
+    	// iterate through current players, check guess vs total number of coins
+    	// if player guesses correctly, player wins round and stops playing -> "<Player> wins the round"
+    	// when there is only one player left -> "<player> loses"
+    	// otherwise ""
+    	for(Player player: currPlayers) {
+    		if(player.getGuess() == totalNumCoins && numCurrPlayers != 1) {
+        			// player wins, remove player, break
+        			player.setIsPlaying(false);
+        			numCurrPlayers--;
+        			if(numCurrPlayers > 1) {
+        				rotatePlayers();
+        				return player.getName() + " wins round";
+        			}
+    		}
+    		else if (numCurrPlayers == 1) { //shortcut if the last player is after the winner in the list
+    			return player.getName() + " loses";
+    		}
+    	}
+    	// if there is one player left, find which one it is
+    	if(numCurrPlayers == 1) {
+    		for(Player player: currPlayers) {
+    			if(player.getIsPlaying()) {
+    				return player.getName() + " loses";
+    			}
+    		}
+    	}
     	
-        return "A loses";
+    	return "";
+
+    	
     }
     
     /**
@@ -127,5 +156,12 @@ public class KnibbleGameManager
     				break;
     		}
     	}
+    }
+    
+    /**
+     * This function pops the first player off the list and adds it to the end of the list preparing for the next round
+     */
+    private void rotatePlayers() {
+    	players.add(players.remove(0));
     }
 }
