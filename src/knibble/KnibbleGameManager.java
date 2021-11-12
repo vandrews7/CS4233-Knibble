@@ -22,6 +22,14 @@ import java.util.List;
 public class KnibbleGameManager
 {
 	private List<Player> players = new ArrayList<Player>();
+	
+	/**
+	 * This enum is used for a helper function to switch between entering holdings or entering guesses.
+	 */
+	enum Info{
+		HOLDING,
+		GUESS
+	}
     
 	/**
      * This is the only constructor for the game manager.
@@ -51,14 +59,7 @@ public class KnibbleGameManager
      */
     public void enterHoldings(List<Integer> coins)
     {
-    	
-    	// pop first item in coins list and set as holding for current player
-    	List<Player> currPlayers = getCurrentPlayers();
-    	for(Player player: currPlayers) {
-    		int i = currPlayers.indexOf(player);
-    		this.players.get(i).setHolding(coins.remove(0)); // pop the first element in the coins list
-    	}
-    	
+    	enterInfo(Info.HOLDING, coins);
     }
     
     /**
@@ -70,12 +71,7 @@ public class KnibbleGameManager
      */
     public void enterGuesses(List<Integer> guesses)
     {
-    	//pop first item in guesses list and set as guess for current player
-    	List<Player> currPlayers = getCurrentPlayers();
-    	for(Player player: currPlayers) {
-    		int i = currPlayers.indexOf(player);
-    		this.players.get(i).setGuess(guesses.remove(0)); // pop the first element in the guesses list
-    	}
+    	enterInfo(Info.GUESS, guesses);
     }
     
     /**
@@ -86,9 +82,11 @@ public class KnibbleGameManager
      */
     public String playRound()
     {
+    	// get list of current players and number of current players
     	List<Player> currPlayers = getCurrentPlayers();
+    	int numCurrPlayers = currPlayers.size();
     	
-    	
+    	// 
     	
         return "A loses";
     }
@@ -108,5 +106,21 @@ public class KnibbleGameManager
     	}
     	
     	return currPlayers;
+    }
+    
+    private void enterInfo(Info type, List<Integer> list) {
+    	//pop first item in guesses list and set as guess for current player
+    	List<Player> currPlayers = getCurrentPlayers();
+    	for(Player player: currPlayers) {
+    		int i = currPlayers.indexOf(player);
+    		switch(type) {
+    			case HOLDING:
+    				this.players.get(i).setHolding(list.remove(0)); // pop the first element in the coins list
+    				break;
+    			case GUESS:
+    				this.players.get(i).setGuess(list.remove(0)); // pop the first element in the guesses list
+    				break;
+    		}
+    	}
     }
 }
