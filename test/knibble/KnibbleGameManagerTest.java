@@ -49,6 +49,40 @@ class KnibbleGameManagerTest
         assertTrue(true);
     }
     
+    @Test
+    void checkAddPlayers()
+    {
+    	KnibbleGameManager manager = new KnibbleGameManager(makePlayers("PlayerOne", "PlayerTwo"));
+    	String[] playerNames = {"PlayerOne", "PlayerTwo"};
+    	List<Player> players = manager.getPlayers();
+    	
+    	players.forEach((player -> assertEquals(playerNames[players.indexOf(player)], player.getName())));
+    }
+    
+    @Test
+    void checkEnterHoldings()
+    {
+    	KnibbleGameManager manager = new KnibbleGameManager(makePlayers("PlayerOne", "PlayerTwo"));
+    	Integer[] holdings = {3, 2};
+    	manager.enterHoldings(makeHoldings(3, 2));
+    	List<Player> players = manager.getPlayers();
+    	
+    	
+    	players.forEach((player -> assertEquals(holdings[players.indexOf(player)], player.getHolding())));
+    }
+    
+    @Test
+    void checkEnterGuesses()
+    {
+    	KnibbleGameManager manager = new KnibbleGameManager(makePlayers("PlayerOne", "PlayerTwo"));
+    	Integer[] guesses = {4, 3};
+    	manager.enterGuesses(makeGuesses(4, 3));
+    	List<Player> players = manager.getPlayers();
+    	
+    	
+    	players.forEach((player -> assertEquals(guesses[players.indexOf(player)], player.getGuess())));
+    }
+    
     @ParameterizedTest
     @MethodSource("gameProvider")
     void playGame(List<String>players, String expected, List<RoundInput> rounds)

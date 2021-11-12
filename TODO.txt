@@ -6,3 +6,13 @@ X holdings=[2, 0]
 X holdings=[2, 0], guesses=[3, 2]
 X [A, B] {[2, 0], [3, 2]} -> A loses
 - [A, B] {[2, 0], [2, 3]} -> B loses
+
+## check adding players
+X create two person game with players "PlayerOne" and "PlayerTwo"
+X check player names against a list of the correct names
+
+## check enter holdings
+X create two player game
+X add holdings 3 and 2 to players respectively
+X check players holdings with list of expected holdings
+
