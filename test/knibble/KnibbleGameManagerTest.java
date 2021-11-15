@@ -10,6 +10,10 @@
  * Copyright ©2020-21 Gary F. Pollice
  *******************************************************************************/
 
+/**
+ * Veronica Andrews (vjandrews)
+ */
+
 package knibble;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -49,6 +53,9 @@ class KnibbleGameManagerTest
         assertTrue(true);
     }
     
+    /**
+     * This test checks the adding players functionality.
+     */
     @Test
     void checkAddPlayers()
     {
@@ -59,6 +66,9 @@ class KnibbleGameManagerTest
     	players.forEach((player -> assertEquals(playerNames[players.indexOf(player)], player.getName())));
     }
     
+    /**
+     * This test checks the enterHoldings functionality.
+     */
     @Test
     void checkEnterHoldings()
     {
@@ -71,6 +81,9 @@ class KnibbleGameManagerTest
     	players.forEach((player -> assertEquals(holdings[players.indexOf(player)], player.getHolding())));
     }
     
+    /**
+     * This test checks the enterGuesses functionality.
+     */
     @Test
     void checkEnterGuesses()
     {
@@ -83,6 +96,12 @@ class KnibbleGameManagerTest
     	players.forEach((player -> assertEquals(guesses[players.indexOf(player)], player.getGuess())));
     }
     
+    /**
+     * This test is for a 2 player game
+     * @param players list of players
+     * @param expected list of expected round outcomes
+     * @param rounds list of round inputs: holdings and guesses
+     */
     @ParameterizedTest
     @MethodSource("gameProvider")
     void playGame(List<String>players, String expected, List<RoundInput> rounds)
@@ -97,6 +116,47 @@ class KnibbleGameManagerTest
         assertEquals(expected, result);
     }
     
+    /**
+     * This test is for a 3 player game
+     * @param players list of players
+     * @param expected list of expected round outcomes
+     * @param rounds list of round inputs: holdings and guesses
+     */
+    @ParameterizedTest
+    @MethodSource("multiRoundGameProvider1")
+    void playMultiRoundGame(List<String> players, List<String> expected, List<RoundInput> rounds)
+    {
+    	KnibbleGameManager manager = new KnibbleGameManager(players);
+    	List<String> results = new ArrayList<>();
+    	for(RoundInput ri: rounds) {
+    		manager.enterHoldings(ri.holdings);
+    		manager.enterGuesses(ri.guesses);
+    		results.add(manager.playRound());
+    	}
+    	assertEquals(expected, results);
+    }
+    
+    /**
+     * This test is for when no players guess the right answer on the first round
+     * @param players list of players
+     * @param expected list of expected round outcomes
+     * @param rounds list of round inputs: holdings and guesses
+     */
+    @ParameterizedTest
+    @MethodSource("multiRoundGameProvider2")
+    void playMultiRoundGame2(List<String> players, List<String> expected, List<RoundInput> rounds)
+    {
+    	KnibbleGameManager manager = new KnibbleGameManager(players);
+    	List<String> results = new ArrayList<>();
+    	for(RoundInput ri: rounds) {
+    		manager.enterHoldings(ri.holdings);
+    		manager.enterGuesses(ri.guesses);
+    		results.add(manager.playRound());
+    	}
+    	assertEquals(expected, results);
+    }
+    
+    
     /**************************** Providers ****************************/
     static Stream<Arguments> gameProvider()
     {
@@ -106,6 +166,31 @@ class KnibbleGameManagerTest
                 )),
             arguments(makePlayers("A", "B"), "B loses", makeRoundInputs(
                 new RoundInput(makeHoldings(2, 0), makeGuesses(2, 3))
+                ))
+        );
+    }
+    
+    static Stream<Arguments> multiRoundGameProvider1()
+    {
+        return Stream.of(
+            arguments(makePlayers("A", "B", "C"), makeExpectedOutcomes("C wins round", "A loses"), makeRoundInputs(
+                new RoundInput(makeHoldings(2, 0, 1), makeGuesses(1, 2, 3)),
+                new RoundInput(makeHoldings(1, 3), makeGuesses(4, 2))
+                )),
+            arguments(makePlayers("A", "B", "C"), makeExpectedOutcomes("A wins round","B loses"), makeRoundInputs(
+                new RoundInput(makeHoldings(2, 0, 1), makeGuesses(3, 2, 1)),
+                new RoundInput(makeHoldings(1, 3), makeGuesses(2, 4))
+                ))
+        );
+    }
+    
+    static Stream<Arguments> multiRoundGameProvider2()
+    {
+        return Stream.of(
+            arguments(makePlayers("A", "B", "C"), makeExpectedOutcomes("", "B wins round", "C loses"), makeRoundInputs(
+                new RoundInput(makeHoldings(2, 0, 1), makeGuesses(1, 2, 4)),
+                new RoundInput(makeHoldings(1, 2, 0), makeGuesses(3, 1, 2)),
+                new RoundInput(makeHoldings(1, 3), makeGuesses(2, 4))
                 ))
         );
     }
@@ -129,6 +214,15 @@ class KnibbleGameManagerTest
     static List<RoundInput> makeRoundInputs(RoundInput... inputs)
     {
         return new ArrayList<>(Arrays.asList(inputs));
+    }
+    /**
+     * This method creates an array of expected outcomes
+     * @param outputs expected output strings
+     * @return list of strings inputted
+     */
+    static List<String> makeExpectedOutcomes(String...outputs)
+    {
+    	return new ArrayList<>(Arrays.asList(outputs));
     }
 }
 

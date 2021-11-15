@@ -10,6 +10,9 @@
  * Copyright ©2020-21 Gary F. Pollice
  *******************************************************************************/
 
+/**
+ * Veronica Andrews (vjandrews)
+ */
 package knibble;
 
 import java.util.ArrayList;
@@ -102,9 +105,9 @@ public class KnibbleGameManager
         				return player.getName() + " wins round";
         			}
     		}
-    		else if (numCurrPlayers == 1) { //shortcut if the last player is after the winner in the list
-    			return player.getName() + " loses";
-    		}
+//    		else if (numCurrPlayers == 1) { //shortcut if the last player is after the winner in the list
+//    			return player.getName() + " loses";
+//    		}
     	}
     	// if there is one player left, find which one it is
     	if(numCurrPlayers == 1) {
@@ -115,6 +118,7 @@ public class KnibbleGameManager
     		}
     	}
     	
+    	rotatePlayers();
     	return "";
 
     	
